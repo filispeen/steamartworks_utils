@@ -1,14 +1,21 @@
 from modules.img_imports import *
+import ffmpeg
 
 def compress_file(iFile, oFile):
-    os.system(f"ffmpeg -y -v quiet -stats -i {iFile} -q:v 0 {oFile}")
+    (
+        ffmpeg
+        .input(iFile)
+        .output(oFile)
+        .run()
+    )
+   # os.system(f"ffmpeg -y -v quiet -stats -i {iFile} -q:v 0 {oFile}")
 
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.abspath(__file__))
     folders = []
     for folder in os.listdir(base_dir):
         folder_path = os.path.join(base_dir, folder)
-        if os.path.isdir(folder_path) and folder not in [".git", "modules", "venv"]:
+        if os.path.isdir(folder_path) and folder not in [".git", "modules", ".venv"]:
             folders.append(folder_path)
     
     with ThreadPoolExecutor() as executor:

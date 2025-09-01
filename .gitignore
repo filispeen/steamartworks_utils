@@ -1,12 +1,5 @@
 # Folders:
-venv/Lib/site-packages/*
-venv/Scripts/*
-!venv/Scripts/*.bat
-!_distutils_hack
-!pip
-!pkg_resources
-!setuptools
-!uv
+.venv/
 __pycache__
 downloads
 upload
@@ -16,6 +9,3 @@ example
 # Files:
 *all_combined*.png
 cookies.json
-!venv/Scripts/pip*.exe
-!venv/Scripts/python*.exe
-

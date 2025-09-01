@@ -1,16 +1,17 @@
 @echo off
-setlocal
 
 set DIR=%~dp0
-set VENV_DIR=%DIR%\venv
+set PATH=%PATH%;%DIR%
 
-call "%VENV_DIR%\Scripts\activate.bat"
+if exist %DIR%\.venv\ (
+    call %DIR%\.venv\Scripts\activate.bat
+    set PYTHON=%DIR%\.venv\Scripts\python.exe
+) else (
+    call python -m venv .venv
+    set PYTHON=%DIR%\.venv\Scripts\python.exe
+    call %DIR%\.venv\Scripts\activate.bat
+)
 
-if not defined PYTHON (set PYTHON=python)
-if not defined VENV_DIR (set "VENV_DIR=%~dp0%venv")
-
-setx PYTHON "%VENV_DIR%\Scripts\Python.exe"
-setx PIP "%VENV_DIR%\Scripts\pip.exe"
-
-call %pip% install uv
-call uv pip install -r requirements.txt
+call %PYTHON% -m pip install --upgrade pip
+call %PYTHON% -m pip install uv
+call %PYTHON% -m uv pip install -r requirements.txt
