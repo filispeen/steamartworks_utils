@@ -32,5 +32,14 @@ def crop_image_to_5_horizontal(image_path, output_dir=None):
         executor.map(lambda args: save_cropped(*args), tasks)
 
 if __name__ == "__main__":
-    image_path = fr"{os.path.dirname(os.path.abspath(__file__))}\resized_all_combined.png"
-    crop_image_to_5_horizontal(image_path)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    folders = []
+    for folder in os.listdir(base_dir):
+        folder_path = os.path.join(os.path.join(base_dir, folder))
+        if os.path.isdir(folder_path) and folder not in ["upload", ".git", "modules", "venv"]:
+            if "resized_all_combined.png" not in os.listdir(folder_path): folders.append(os.path.join(folder, "all_combined.png"))
+            else: folders.append(os.path.join(folder, "resized_all_combined.png"))
+    
+    with ThreadPoolExecutor() as executor:
+        for folder_path in folders:
+            executor.submit(crop_image_to_5_horizontal, folder_path)

@@ -19,14 +19,12 @@ def delete_last_5(driver):
 
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span.general_btn.panel_btn")))
         panel_elements = driver.find_elements(By.CSS_SELECTOR, "span.general_btn.panel_btn")
-        print(panel_elements)
 
         for subel in panel_elements:
-            print(subel.text)
             if "delete" in subel.text.strip().lower():
-                print(f"Deleting {i}")
+                print(f"Deleting {i+1}")
                 subel.click()
-                sleep(1)
+                sleep(0.5)
                 okbutt = WebDriverWait(driver, 60).until( EC.element_to_be_clickable((By.CSS_SELECTOR, ".btn_green_steamui.btn_medium")) )
                 okbutt.click()
                 break

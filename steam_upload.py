@@ -1,7 +1,6 @@
 from modules.imports import *
 
 UPLOAD_URL = "https://steamcommunity.com/sharedfiles/edititem/767/3"
-FILES = fr"{os.path.dirname(os.path.abspath(__file__))}\upload"
 
 def upload_file(driver, file_to_upload):
     driver.get(UPLOAD_URL)
@@ -18,13 +17,21 @@ def upload_file(driver, file_to_upload):
     WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span.subscribeText")))
 
 def main():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    upload_folders = []
+    for file in os.listdir(base_dir):
+        folder_path = os.path.join(os.path.join(base_dir, os.path.join(file, "upload")))
+        if os.path.isdir(folder_path) and file not in [".git", "modules", "venv"]:
+            print(folder_path)
+            upload_folders.append(folder_path)
     driver = webdriver.Chrome()
     try:
-        for file_name in os.listdir(FILES):
-            file_path = os.path.join(FILES, file_name)
-            if os.path.isfile(file_path):
-                print(f"Uploading: {file_name}")
-                upload_file(driver, file_path)
+        for directory in upload_folders:
+            for file_name in os.listdir(directory):
+                file_path = os.path.join(directory, file_name)
+                if os.path.isfile(file_path):
+                    print(f"Uploading: {file_path}")
+                    upload_file(driver, file_path)
     finally:
         driver.quit()
 

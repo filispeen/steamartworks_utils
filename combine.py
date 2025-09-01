@@ -1,14 +1,15 @@
 from modules.img_imports import *
 
 def combine_images_vertically(folder_path, output_name="all_combined.png"):
-    extensions = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.avif', '.heic', '.jfif')
+    extensions = ('.png', '.jpg', '.jpeg')
 
     images = [
         f for f in os.listdir(folder_path)
-        if f.lower().endswith(extensions) and os.path.splitext(f)[0].isdigit()
+        if f.lower().endswith(extensions) and os.path.splitext(f)[0]
     ]
     images.sort(key=lambda x: int(os.path.splitext(x)[0]))
 
+    print(images)
     if not images:
         print(f"No valid images found in {folder_path}")
         return
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     folders = []
     for folder in os.listdir(base_dir):
         folder_path = os.path.join(base_dir, folder)
-        if os.path.isdir(folder_path) and folder not in ["upload", "downloads", "tmp"]:
+        if os.path.isdir(folder_path) and folder not in ["upload", ".git", "modules", "venv"]:
             folders.append(folder)
 
     with ThreadPoolExecutor() as executor:

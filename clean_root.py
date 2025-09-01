@@ -1,15 +1,16 @@
 from modules.img_imports import *
 
-def delete_file(f):
-    try:
-        os.remove(f)
-        print(f"Deleted: {f}")
-    except Exception as e:
-        print(f"Error deleting {f}: {e}")
+exts = ('.png', '.jpg', '.jpeg', ".gif")
+exclude_dirs = [".git", "modules", "venv"]
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == "__main__":
-    exts = ('.png', '.jpg', '.jpeg')
-    script_name = os.path.basename(__file__)
-    files = [f for f in os.listdir('.') if f.endswith(exts) and f != script_name]
-    with ThreadPoolExecutor() as executor:
-        executor.map(delete_file, files)
+    files = os.listdir(base_dir)
+    for file in files:
+        path = os.path.join(base_dir, file)
+        if os.path.isdir(path):
+            if file not in exclude_dirs:
+                shutil.rmtree(path)
+        else: 
+            if file.endswith(exts):
+                os.remove(path)

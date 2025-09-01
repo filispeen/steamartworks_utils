@@ -14,5 +14,5 @@ set PYTHON="%VENV_DIR%\Scripts\Python.exe"
 call "%VENV_DIR%\Scripts\activate.bat"
 echo venv %PYTHON%
 
-call pip install uv==0.8.14
+call pip install uv
 call uv pip install -r requirements.txt
