@@ -1,6 +1,6 @@
 @echo off
 
-call env.bat
+call %~dp0\env.bat
 
 where ffmpeg.exe >nul 2>&1
 if %ERRORLEVEL%==1 (

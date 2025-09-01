@@ -1,18 +1,16 @@
 @echo off
+setlocal
 
 set DIR=%~dp0
-set PATH=%DIR%\venv;%DIR%\venv\Scripts;%PATH%
-set PY_LIBS=%DIR%\venv\Scripts\Lib;%DIR%\venv\Scripts\Lib\site-packages
-set PY_PIP=%DIR%\venv\Scripts
-set SKIP_VENV=0
-set PIP_INSTALLER_LOCATION=%DIR%\venv\get-pip.py
+set VENV_DIR=%DIR%\venv
+
+call "%VENV_DIR%\Scripts\activate.bat"
 
 if not defined PYTHON (set PYTHON=python)
 if not defined VENV_DIR (set "VENV_DIR=%~dp0%venv")
 
-set PYTHON="%VENV_DIR%\Scripts\Python.exe"
-call "%VENV_DIR%\Scripts\activate.bat"
-echo venv %PYTHON%
+setx PYTHON "%VENV_DIR%\Scripts\Python.exe"
+setx PIP "%VENV_DIR%\Scripts\pip.exe"
 
-call pip install uv
+call %pip% install uv
 call uv pip install -r requirements.txt
