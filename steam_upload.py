@@ -9,7 +9,7 @@ def upload_file(driver, file_to_upload):
         if steam_login(driver): store_cookies(driver) #Storing cookies
     driver.get(UPLOAD_URL)
 
-    upload_input = driver.find_element(By.CSS_SELECTOR, "input#file[type='file']")
+    upload_input = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, "input#file[type='file']")))
     upload_input.send_keys(file_to_upload)
     driver.execute_script(r"v_trim=_=>{return _},$J('#title').val(' \n'+Array.from(Array(126),_=>'\t').join(''));$J('[name=consumer_app_id]').val(480);$J('[name=file_type]').val(0);$J('[name=visibility]').val(0);")
     driver.find_element(By.CSS_SELECTOR, "input.inputTagsFilter[type='checkbox'][name='agree_terms']").click()  # Погодитися з умовами
@@ -24,7 +24,8 @@ def main():
         if os.path.isdir(folder_path) and file not in [".git", "modules", "venv"]:
             print(folder_path)
             upload_folders.append(folder_path)
-    driver = webdriver.Chrome()
+    #driver = webdriver.Chrome()
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     try:
         for directory in upload_folders:
             for file_name in os.listdir(directory):

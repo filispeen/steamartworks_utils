@@ -1,14 +1,7 @@
 from modules.img_imports import *
-import ffmpeg
 
 def compress_file(iFile, oFile):
-    (
-        ffmpeg
-        .input(iFile)
-        .output(oFile)
-        .run()
-    )
-   # os.system(f"ffmpeg -y -v quiet -stats -i {iFile} -q:v 0 {oFile}")
+   os.system(f"ffmpeg -y -v quiet -stats -i {iFile} -q:v 0 {oFile}")
 
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.abspath(__file__))
