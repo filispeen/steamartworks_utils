@@ -25,7 +25,8 @@ def main():
             print(folder_path)
             upload_folders.append(folder_path)
     #driver = webdriver.Chrome()
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    
+    driver = get_driver()
     try:
         for directory in upload_folders:
             for file_name in os.listdir(directory):

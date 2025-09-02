@@ -1,11 +1,23 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.service import Service
+
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.edge.service import Service as EdgeService
+
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium import webdriver
+
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+
 from time import sleep
 import requests
 import shutil
@@ -53,6 +65,32 @@ def steam_login(driver=None):
         print("Unable to say if authentification is successfull")
         return False
 
+def get_driver():
+    try:
+        print("Trying Chrome...")
+        chrome_options = ChromeOptions()
+        return webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),
+                                options=chrome_options)
+    except Exception:
+        print("Chrome failed")
+
+    try:
+        print("Trying Firefox...")
+        firefox_options = FirefoxOptions()
+        return webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()),
+                                 options=firefox_options)
+    except Exception:
+        print("Firefox failed")
+
+    try:
+        print("Trying Edge...")
+        edge_options = EdgeOptions()
+        return webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()),
+                              options=edge_options)
+    except Exception:
+        print("Edge failed")
+
+    raise RuntimeError("No supported browser could be started. Please install Chrome, Edge, or Firefox.")
 
 
 if __name__ == "__main__":
