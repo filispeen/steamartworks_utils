@@ -32,7 +32,7 @@ def delete_last_5(driver):
         i += 1
 
 if __name__ == "__main__":
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver = get_driver()
     try:
         delete_last_5(driver)
     finally:
