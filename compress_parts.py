@@ -8,7 +8,8 @@ if __name__ == "__main__":
     folders = []
     for folder in os.listdir(base_dir):
         folder_path = os.path.join(base_dir, folder)
-        if os.path.isdir(folder_path) and folder not in [".git", "modules", ".venv"]:
+        if ".ignore" in folder_path: break
+        if os.path.isdir(folder_path) and folder not in ingore_dirs():
             folders.append(folder_path)
     
     with ThreadPoolExecutor() as executor:

@@ -24,6 +24,9 @@ import shutil
 import json
 import os
 
+def ingore_dirs():
+    return ["upload", ".git", "modules", ".venv", ".ignore"]
+
 def load_cookies(driver=None, file_path="cookies.json"):
     if driver==None: raise RuntimeError("You kinda forgot to use requied \"driver\" argument.")
     if file_path in os.listdir("."):

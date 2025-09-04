@@ -36,7 +36,8 @@ if __name__ == "__main__":
     folders = []
     for folder in os.listdir(base_dir):
         folder_path = os.path.join(os.path.join(base_dir, folder))
-        if os.path.isdir(folder_path) and folder not in ["upload", ".git", "modules", ".venv"]:
+        if os.path.isdir(folder_path) and folder not in ingore_dirs():
+            if ".ignore" in folder_path: break
             if "resized_all_combined.png" not in os.listdir(folder_path): folders.append(os.path.join(folder, "all_combined.png"))
             else: folders.append(os.path.join(folder, "resized_all_combined.png"))
     

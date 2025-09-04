@@ -1,7 +1,7 @@
 from modules.img_imports import *
 
 exts = ('.png', '.jpg', '.jpeg', ".gif")
-exclude_dirs = [".git", "modules", ".venv"]
+exclude_dirs = ingore_dirs()
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == "__main__":

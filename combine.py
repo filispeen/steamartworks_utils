@@ -43,7 +43,10 @@ if __name__ == "__main__":
     folders = []
     for folder in os.listdir(base_dir):
         folder_path = os.path.join(base_dir, folder)
-        if os.path.isdir(folder_path) and folder not in ["upload", ".git", "modules", ".venv", ".ignore"]:
+        if os.path.isdir(folder_path) :
+            for dir_to_ignore in ingore_dirs():
+                if folder == dir_to_ignore:
+                    break
             print(f"Adding folder for process: {folder}")
             folders.append(folder)
 

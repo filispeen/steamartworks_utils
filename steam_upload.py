@@ -21,16 +21,17 @@ def main():
     upload_folders = []
     for file in os.listdir(base_dir):
         folder_path = os.path.join(os.path.join(base_dir, os.path.join(file, "upload")))
-        if os.path.isdir(folder_path) and file not in [".git", "modules", "venv", ".ignore"]:
+        if ".ignore" in folder_path: break
+        if os.path.isdir(folder_path) and file not in ingore_dirs():
             print(folder_path)
             upload_folders.append(folder_path)
-    #driver = webdriver.Chrome()
     
     driver = get_driver()
     try:
         for directory in upload_folders:
             for file_name in os.listdir(directory):
                 file_path = os.path.join(directory, file_name)
+                if ".ignore" in folder_path: break
                 if os.path.isfile(file_path):
                     print(f"Uploading: {file_path}")
                     upload_file(driver, file_path)
