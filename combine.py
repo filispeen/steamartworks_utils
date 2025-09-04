@@ -43,7 +43,8 @@ if __name__ == "__main__":
     folders = []
     for folder in os.listdir(base_dir):
         folder_path = os.path.join(base_dir, folder)
-        if os.path.isdir(folder_path) and folder not in ["upload", ".git", "modules", ".venv"]:
+        if os.path.isdir(folder_path) and folder not in ["upload", ".git", "modules", ".venv", ".ignore"]:
+            print(f"Adding folder for process: {folder}")
             folders.append(folder)
 
     with ThreadPoolExecutor() as executor:

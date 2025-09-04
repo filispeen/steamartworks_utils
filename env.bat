@@ -1,4 +1,5 @@
 @echo off
+setlocal
 
 set DIR=%~dp0
 set PATH=%PATH%;%DIR%\.venv\Scripts\
