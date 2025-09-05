@@ -1,4 +1,5 @@
 from modules.img_imports import *
+from modules.imports import *
 
 def combine_images_vertically(folder_path, output_name="all_combined.png"):
     extensions = ('.png', '.jpg', '.jpeg')
@@ -9,7 +10,6 @@ def combine_images_vertically(folder_path, output_name="all_combined.png"):
     ]
     images.sort(key=lambda x: int(os.path.splitext(x)[0]))
 
-    print(images)
     if not images:
         print(f"No valid images found in {folder_path}")
         return
@@ -38,18 +38,20 @@ def combine_images_vertically(folder_path, output_name="all_combined.png"):
     combined.save(output_path)
     print(f"Combined image saved to {output_path}")
 
-if __name__ == "__main__":
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    folders = []
-    for folder in os.listdir(base_dir):
-        folder_path = os.path.join(base_dir, folder)
-        if os.path.isdir(folder_path) :
-            for dir_to_ignore in ingore_dirs():
-                if folder == dir_to_ignore:
-                    break
-            print(f"Adding folder for process: {folder}")
-            folders.append(folder)
+@click.command()
+@click.option('--base-dir', help='Base directory containing subdirectories with images.')
+def main(base_dir=None):
+    if base_dir is None:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        folders = list_folders(base_dir)
+    else:
+        folders = [ base_dir ]
+
+    print(f"Found {len(folders)} folders to process.")
 
     with ThreadPoolExecutor() as executor:
         for folder_path in folders:
             executor.submit(combine_images_vertically, folder_path)
+
+if __name__ == "__main__":
+    main()

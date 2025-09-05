@@ -1,4 +1,5 @@
 from modules.img_imports import *
+from modules.imports import list_folders, click
 
 def save_cropped(cropped, out_path, target_size):
     cropped = cropped.resize(target_size, Image.LANCZOS)
@@ -13,7 +14,7 @@ def crop_image_to_5_horizontal(image_path, output_dir=None):
         target_size = (part_width, height)
 
         if output_dir is None:
-            output_dir = os.path.dirname(image_path)
+            output_dir = os.path.join(os.path.dirname(image_path), "upload")
         os.makedirs(output_dir, exist_ok=True)
 
         tasks = []
@@ -26,21 +27,43 @@ def crop_image_to_5_horizontal(image_path, output_dir=None):
                 output_dir,
                 f"{os.path.splitext(os.path.basename(image_path))[0]}_part{i}.png"
             )
+            #print(f"Generated path: {out_path}")
+            if "all_combined_part" in out_path and "resized_all_combined_part" not in out_path:
+                out_path = out_path.replace("all_combined_part", "resized_all_combined_part")
+                print(f"Processing and saving: {out_path}")
             tasks.append((cropped, out_path, target_size))
 
     with ThreadPoolExecutor() as executor:
-        executor.map(lambda args: save_cropped(*args), tasks)
+        for task in tasks:
+            executor.submit(save_cropped, *task)
+
+@click.command()
+@click.option('--base-dir', help='Base directory containing subdirectories with images.')
+def main(base_dir=None):
+    folders = []
+    if base_dir is None:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        for folder in list_folders(base_dir):
+            folders.append(os.path.join(base_dir, folder))
+    else:
+        folders = [ base_dir ]
+
+    image_paths = []
+    for folder in folders:
+        if not os.path.isdir(folder):
+            continue
+        files = os.listdir(folder)
+        if "resized_all_combined.png" in files:
+            image_paths.append(os.path.join(folder, "resized_all_combined.png"))
+        else:
+            if "all_combined.png" in files:
+                image_paths.append(os.path.join(folder, "all_combined.png"))
+
+    print(f"{len(image_paths)} images to process.")
+    with ThreadPoolExecutor() as executor:
+        for image_path in image_paths:
+            print(image_path)
+            executor.submit(crop_image_to_5_horizontal, image_path)
 
 if __name__ == "__main__":
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    folders = []
-    for folder in os.listdir(base_dir):
-        folder_path = os.path.join(os.path.join(base_dir, folder))
-        if os.path.isdir(folder_path) and folder not in ingore_dirs():
-            if ".ignore" in folder_path: break
-            if "resized_all_combined.png" not in os.listdir(folder_path): folders.append(os.path.join(folder, "all_combined.png"))
-            else: folders.append(os.path.join(folder, "resized_all_combined.png"))
-    
-    with ThreadPoolExecutor() as executor:
-        for folder_path in folders:
-            executor.submit(crop_image_to_5_horizontal, folder_path)
+    main()

@@ -21,11 +21,21 @@ from webdriver_manager.firefox import GeckoDriverManager
 from time import sleep
 import requests
 import shutil
+import click
 import json
 import os
 
 def ingore_dirs():
     return ["upload", ".git", "modules", ".venv", ".ignore"]
+
+def list_folders(base_dir):
+    folders = []
+    for folder in os.listdir(base_dir):
+        folder_path = os.path.join(base_dir, folder)
+        if ".ignore" in folder_path: break
+        if os.path.isdir(folder_path) and folder not in ingore_dirs():
+            folders.append(folder)
+    return sorted(folders)
 
 def load_cookies(driver=None, file_path="cookies.json"):
     if driver==None: raise RuntimeError("You kinda forgot to use requied \"driver\" argument.")
@@ -47,15 +57,25 @@ def steam_auth_check(driver=None):
     if driver==None: raise RuntimeError("You kinda forgot to use requied \"driver\" argument.")
     if load_cookies(driver): return True
     try:
-        WebDriverWait(driver, 360).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "input._2GBWeup5cttgbTw8FM3tfx[type='text']"))  # аватарка в меню
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "input._2GBWeup5cttgbTw8FM3tfx[type='text']"))  # menu avatar
         )
         login_input = driver.find_element(By.CSS_SELECTOR, "input._2GBWeup5cttgbTw8FM3tfx[type='text']")
         if login_input.is_displayed():
             return False # Auth needed
     except NoSuchElementException:
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "a.global_action_link")) # login button
+        )
+        global_action_links = [
+            el for el in driver.find_elements(By.CSS_SELECTOR, "a.global_action_link")
+            if el.get_attribute("class") == "global_action_link"
+        ]
+        if global_action_links and all(el.is_displayed() for el in global_action_links):
+            print("Login button found, authentication required.")
+            return False
         return True # Auth not needed
-    
+
 def steam_login(driver=None):
     if driver==None: raise RuntimeError("You kinda forgot to use requied \"driver\" argument.")
     try:

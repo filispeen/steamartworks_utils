@@ -16,22 +16,25 @@ def upload_file(driver, file_to_upload):
     driver.find_element(By.CSS_SELECTOR, "a.btn_blue_white_innerfade.btn_medium").click()  # Кнопка "Зберегти"
     WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span.subscribeText")))
 
-def main():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    upload_folders = []
-    for file in os.listdir(base_dir):
-        folder_path = os.path.join(os.path.join(base_dir, os.path.join(file, "upload")))
-        if ".ignore" in folder_path: break
-        if os.path.isdir(folder_path) and file not in ingore_dirs():
-            print(folder_path)
-            upload_folders.append(folder_path)
+@click.command()
+@click.option('--base-dir', help='Base directory containing subdirectories with images.')
+def main(base_dir=None):
+    if base_dir is None:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        folders = list_folders(base_dir)
+    else:
+        if base_dir.endswith("upload"): path = os.path.dirname(base_dir)
+        else: path = os.path.join(base_dir, "upload")
+        folders = [ path ]
     
+    print(f"Found {len(folders)} folders to process.")
+
     driver = get_driver()
     try:
-        for directory in upload_folders:
+        for directory in folders:
             for file_name in os.listdir(directory):
                 file_path = os.path.join(directory, file_name)
-                if ".ignore" in folder_path: break
+                if ".ignore" in file_path: break
                 if os.path.isfile(file_path):
                     print(f"Uploading: {file_path}")
                     upload_file(driver, file_path)
