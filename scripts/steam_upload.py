@@ -22,7 +22,7 @@ def upload_file(driver, file_to_upload):
 @click.option('--base-dir', help='Base directory containing subdirectories with images.')
 def main(base_dir=None):
     if base_dir==None:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
         folders = list_folders(base_dir)
         for i in range(len(folders)):
             folders[i] = os.path.join(base_dir, folders[i], "upload")

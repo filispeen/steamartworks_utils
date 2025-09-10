@@ -4,7 +4,7 @@ from modules.img_imports import *
 
 exts = ('.png', '.jpg', '.jpeg', ".gif")
 exclude_dirs = ingore_dirs()
-base_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
 if __name__ == "__main__":
     print(f"Cleaning up the root directory: {base_dir}")

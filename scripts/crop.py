@@ -50,9 +50,10 @@ def crop_image_to_5_horizontal(image_path, output_dir=None, horizontal_resize=Tr
 def main(base_dir=None, h_resize=True):
     folders = []
     if base_dir is None:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
         for folder in list_folders(base_dir):
             folders.append(os.path.join(base_dir, folder))
+        print(base_dir)
     else:
         folders = [ base_dir ]
 

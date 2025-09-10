@@ -26,7 +26,7 @@ import json
 import os
 
 def ingore_dirs():
-    return ["upload", ".git", "modules", ".venv", ".ignore"]
+    return ["upload", ".git", "modules", ".venv", ".ignore", "__pycache__", "scripts"]
 
 def list_folders(base_dir):
     folders = []

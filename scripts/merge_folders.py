@@ -31,5 +31,5 @@ def merge_folders(base_dir, output_folder="merged"):
         print(f"Renamed folder {folder_path} -> {new_folder_path}")
 
 if __name__ == "__main__":
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
     merge_folders(base_dir)

@@ -12,7 +12,7 @@ def compress_file(iFile, oFile):
 @click.option('--base-dir', help='Base directory containing subdirectories with images.')
 def main(base_dir=None):
     if base_dir is None:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
         folders = []
     else:
         folders = [ base_dir ]
