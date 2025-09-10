@@ -12,4 +12,4 @@ if exist "%DIR%.venv\" (
     call "%venv_activate_script%"
 )
 
-call %PYTHON% cleanup_root.py
+call %PYTHON% %DIR%scripts\clean_root.py

@@ -3,7 +3,6 @@
 set DIR=%~dp0
 set venv_activate_script=%DIR%.venv\Scripts\activate.bat
 
-REM Вызов активации среды должен быть через call и с кавычками
 if exist "%DIR%.venv\" (
     call "%venv_activate_script%"
     set PYTHON=%DIR%.venv\Scripts\python.exe
@@ -13,7 +12,6 @@ if exist "%DIR%.venv\" (
     call "%venv_activate_script%"
 )
 
-call %PYTHON% -m pip install --upgrade pip
-call %PYTHON% -m pip install uv
-call %PYTHON% -m uv pip install -r requirements.txt
-call %PYTHON% %DIR%modules\ffmpeg_.py --path %DIR%.venv\Scripts\
+call %PYTHON% ./modules/ffmpeg_.py --path %DIR%.venv\Scripts\
+
+call %PYTHON% %DIR%scripts\steam_cleanup.py

@@ -1,8 +1,10 @@
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from modules.img_imports import *
 from modules.imports import ingore_dirs, click
 
 def compress_file(iFile, oFile):
-   print(f"Compressing {iFile} to {oFile}")
+   print(f"Compressing {iFile} into {oFile}")
    os.system(f"ffmpeg -y -v quiet -stats -i {iFile} -q:v 0 {oFile}")
    os.remove(iFile)
 
@@ -21,6 +23,9 @@ def main(base_dir=None):
         if os.path.isdir(folder_path) and folder not in ingore_dirs():
             folders.append(folder_path)
     
+    if len(folders) > 0:
+        print(f"Compressing images parts in {len(folders)} folders")
+
     with ThreadPoolExecutor() as executor:
         for folder in folders:
             if "upload" not in os.listdir(folder): os.makedirs(os.path.join(folder, "upload"))

@@ -1,11 +1,12 @@
 # Folders:
+*/
 .venv/
 __pycache__
 downloads
 upload
 example
 !modules/
-*/
+!scripts/
 
 # Files:
 *all_combined*.png

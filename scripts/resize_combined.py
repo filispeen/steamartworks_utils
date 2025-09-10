@@ -1,3 +1,5 @@
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from modules.img_imports import *
 from modules.imports import list_folders, click
 
@@ -35,7 +37,8 @@ def main(base_dir=None):
     else:
         folders = [ base_dir ]
 
-    print(f"Found {len(folders)} folders to process.")
+    if len(folders) > 0:
+        print(f"Resizing images parts in {len(folders)} folders")
     
     with ThreadPoolExecutor() as executor:
         for folder_path in folders:

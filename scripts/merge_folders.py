@@ -1,3 +1,5 @@
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from modules.img_imports import *
 from modules.imports import list_folders
 
@@ -8,6 +10,9 @@ def merge_folders(base_dir, output_folder="merged"):
     if os.path.exists(output_path): shutil.rmtree(output_path)
     os.makedirs(output_path, exist_ok=True)
     file_counter = 1
+
+    if len(folders) > 0:
+        print(f"Merging multible folders({len(folders)}) into one: {output_folder}")
 
     for folder in folders:
         folder_path = os.path.join(base_dir, folder)

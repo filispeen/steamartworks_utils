@@ -21,6 +21,6 @@ if "%*"=="" (
 ) else (
     for %%F in (%*) do (
         echo Uploading folder: %%F
-        call %PYTHON% steam_upload.py --base-dir %%F
+        call %PYTHON% %DIR%scripts\steam_upload.py --base-dir %%F
     )
 )

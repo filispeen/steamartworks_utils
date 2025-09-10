@@ -1,3 +1,5 @@
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from modules.img_imports import *
 from modules.imports import list_folders, click
 
@@ -53,6 +55,9 @@ def main(base_dir=None, h_resize=True):
             folders.append(os.path.join(base_dir, folder))
     else:
         folders = [ base_dir ]
+
+    if len(folders) > 0:
+        print(f"Cropping images in {len(folders)} folders")
 
     image_paths = []
     for folder in folders:

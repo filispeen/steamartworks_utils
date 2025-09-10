@@ -1,3 +1,5 @@
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from modules.imports import *
 
 UPLOAD_URL = "https://steamcommunity.com/sharedfiles/edititem/767/3"
@@ -28,7 +30,8 @@ def main(base_dir=None):
         path = os.path.join(base_dir, "upload")
         folders = [ path ]
     
-    print(f"Found {len(folders)} folders to process.")
+    if len(folders) > 0:
+        print(f"Uploading images from {len(folders)} folders")
 
     driver = get_driver()
     try:
@@ -36,7 +39,7 @@ def main(base_dir=None):
             for file_name in os.listdir(directory):
                 file_path = os.path.join(base_dir, os.path.join(directory, file_name))
                 if ".ignore" in file_path: break
-                if os.path.isfile(file_path) and "upload" in file_path:
+                if os.path.isfile(file_path):
                     print(f"Uploading: {file_path}")
                     upload_file(driver, file_path)
     finally:
