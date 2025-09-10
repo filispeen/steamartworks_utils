@@ -2,7 +2,9 @@ from modules.img_imports import *
 from modules.imports import ingore_dirs, click
 
 def compress_file(iFile, oFile):
+   print(f"Compressing {iFile} to {oFile}")
    os.system(f"ffmpeg -y -v quiet -stats -i {iFile} -q:v 0 {oFile}")
+   os.remove(iFile)
 
 @click.command()
 @click.option('--base-dir', help='Base directory containing subdirectories with images.')
@@ -22,10 +24,10 @@ def main(base_dir=None):
     with ThreadPoolExecutor() as executor:
         for folder in folders:
             if "upload" not in os.listdir(folder): os.makedirs(os.path.join(folder, "upload"))
-            for file in os.listdir(folder):
+            for file in os.listdir(os.path.join(folder, "upload")):
                 if "resized_all_combined_" in file and file.endswith('.png'):
-                    iFile = os.path.join(folder, file)
-                    oFile = os.path.join(folder, os.path.join("upload", file.replace(".png", ".jpg")))
+                    iFile = os.path.join(os.path.join(folder, "upload"), file)
+                    oFile = os.path.join(os.path.join(folder, "upload"), file.replace(".png", ".jpg"))
                     executor.submit(compress_file, iFile, oFile)
 
 if __name__ == "__main__":

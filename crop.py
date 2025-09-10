@@ -1,13 +1,18 @@
 from modules.img_imports import *
 from modules.imports import list_folders, click
 
-def save_cropped(cropped, out_path, target_size):
-    cropped = cropped.resize(target_size, Image.LANCZOS)
+def save_cropped(cropped, out_path, target_size, horizontal_resize=True):
+    if horizontal_resize:
+        target_size = (152, cropped.size[1])
+        cropped = cropped.resize(target_size, Image.LANCZOS)
+    else:
+        cropped = cropped.resize(target_size, Image.LANCZOS)
     cropped.save(out_path)
     cropped.close()
     print(f"Saved: {out_path}")
 
-def crop_image_to_5_horizontal(image_path, output_dir=None):
+def crop_image_to_5_horizontal(image_path, output_dir=None, horizontal_resize=True):
+    H_resize = horizontal_resize
     with Image.open(image_path) as img:
         width, height = img.size
         part_width = width // 5
@@ -31,15 +36,16 @@ def crop_image_to_5_horizontal(image_path, output_dir=None):
             if "all_combined_part" in out_path and "resized_all_combined_part" not in out_path:
                 out_path = out_path.replace("all_combined_part", "resized_all_combined_part")
                 print(f"Processing and saving: {out_path}")
-            tasks.append((cropped, out_path, target_size))
+            tasks.append((cropped, out_path, target_size, H_resize))
 
     with ThreadPoolExecutor() as executor:
         for task in tasks:
             executor.submit(save_cropped, *task)
 
 @click.command()
-@click.option('--base-dir', help='Base directory containing subdirectories with images.')
-def main(base_dir=None):
+@click.option("--h-resize", help='Yes/No to resize horizontally into perfect resolution for work.', default=True, type=bool)
+@click.option("--base-dir", help='Base directory containing subdirectories with images.')
+def main(base_dir=None, h_resize=True):
     folders = []
     if base_dir is None:
         base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -63,7 +69,7 @@ def main(base_dir=None):
     with ThreadPoolExecutor() as executor:
         for image_path in image_paths:
             print(image_path)
-            executor.submit(crop_image_to_5_horizontal, image_path)
+            executor.submit(crop_image_to_5_horizontal, image_path, horizontal_resize=h_resize)
 
 if __name__ == "__main__":
     main()

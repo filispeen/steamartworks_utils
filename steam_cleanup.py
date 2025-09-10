@@ -1,7 +1,8 @@
 from modules.imports import *
 
 steamID = "FILISPEENCS2" # ENTER YOUR STEAMID
-UPLOAD_URL = f"https://steamcommunity.com/id/{steamID}/myworkshopfiles/" 
+UPLOAD_URL = f"https://steamcommunity.com/login/home/?goto=id%2F{steamID}%2Fmyworkshopfiles%2F" 
+items_to_delete = 4
 
 def delete_last_5(driver):
     driver.get(UPLOAD_URL)
@@ -10,7 +11,7 @@ def delete_last_5(driver):
         if steam_login(driver): store_cookies(driver) #Storing cookies
     
     i = 0
-    while i < 5:
+    while i < items_to_delete:
         driver.get(UPLOAD_URL)
 
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CLASS_NAME, "workshopItem")))

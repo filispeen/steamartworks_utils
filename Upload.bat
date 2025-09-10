@@ -17,16 +17,10 @@ call %PYTHON% ./modules/ffmpeg_.py --path %DIR%.venv\Scripts\
 if "%*"=="" (
   echo If you need to process specific folder with your images. Drag and drop folder into this batch file.
   timeout /t 3 /nobreak > nul
-  call %PYTHON% combine.py
-  call %PYTHON% resize_combined.py
-  call %PYTHON% crop.py
-  call %PYTHON% compress_parts.py
+  call %PYTHON% steam_upload.py
 ) else (
     for %%F in (%*) do (
-        echo Processing folder: %%F
-        call %PYTHON% combine.py --base-dir %%F
-        call %PYTHON% resize_combined.py --base-dir %%F
-        call %PYTHON% crop.py --base-dir %%F
-        call %PYTHON% compress_parts.py --base-dir %%F
+        echo Uploading folder: %%F
+        call %PYTHON% steam_upload.py --base-dir %%F
     )
 )

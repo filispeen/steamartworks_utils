@@ -57,23 +57,13 @@ def steam_auth_check(driver=None):
     if driver==None: raise RuntimeError("You kinda forgot to use requied \"driver\" argument.")
     if load_cookies(driver): return True
     try:
-        WebDriverWait(driver, 15).until(
+        WebDriverWait(driver, 7).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "input._2GBWeup5cttgbTw8FM3tfx[type='text']"))  # menu avatar
         )
         login_input = driver.find_element(By.CSS_SELECTOR, "input._2GBWeup5cttgbTw8FM3tfx[type='text']")
         if login_input.is_displayed():
             return False # Auth needed
     except NoSuchElementException:
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "a.global_action_link")) # login button
-        )
-        global_action_links = [
-            el for el in driver.find_elements(By.CSS_SELECTOR, "a.global_action_link")
-            if el.get_attribute("class") == "global_action_link"
-        ]
-        if global_action_links and all(el.is_displayed() for el in global_action_links):
-            print("Login button found, authentication required.")
-            return False
         return True # Auth not needed
 
 def steam_login(driver=None):
