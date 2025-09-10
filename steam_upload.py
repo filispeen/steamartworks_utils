@@ -19,12 +19,13 @@ def upload_file(driver, file_to_upload):
 @click.command()
 @click.option('--base-dir', help='Base directory containing subdirectories with images.')
 def main(base_dir=None):
-    if base_dir is None:
+    if base_dir==None:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         folders = list_folders(base_dir)
-    else:
-        if base_dir.endswith("upload"): path = os.path.dirname(base_dir)
-        else: path = os.path.join(base_dir, "upload")
+        for i in range(len(folders)):
+            folders[i] = os.path.join(base_dir, folders[i], "upload")
+    else: 
+        path = os.path.join(base_dir, "upload")
         folders = [ path ]
     
     print(f"Found {len(folders)} folders to process.")
@@ -33,9 +34,9 @@ def main(base_dir=None):
     try:
         for directory in folders:
             for file_name in os.listdir(directory):
-                file_path = os.path.join(directory, file_name)
+                file_path = os.path.join(base_dir, os.path.join(directory, file_name))
                 if ".ignore" in file_path: break
-                if os.path.isfile(file_path):
+                if os.path.isfile(file_path) and "upload" in file_path:
                     print(f"Uploading: {file_path}")
                     upload_file(driver, file_path)
     finally:
